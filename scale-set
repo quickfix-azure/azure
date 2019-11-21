@@ -1,0 +1,23 @@
+// First Create the Scale Set
+az vmss create --resource-group azuredemo --name ScaleSet --image UbuntuLTS --upgrade-policy-mode automatic --instance-count 1 --admin-username techusr --generate-ssh-keys
+
+// Then create the Autoscale profile
+az monitor autoscale create --resource-group azuredemo --resource ScaleSet --resource-type Microsoft.Compute/virtualMachineScaleSets --name autoscale1 --min-count 1  --max-count 10 --count 1
+
+// Then creating the rule to scale out
+az monitor autoscale rule create --resource-group azuredemo --autoscale-name autoscale1 --condition "Percentage CPU > 20 avg 5m" --scale out 1
+
+// Then creating the rule to scale in
+az monitor autoscale rule create --resource-group azuredemo --autoscale-name autoscale1 --condition "Percentage CPU < 20 avg 5m" --scale in 1
+
+// Get the IP address for the instance 
+az vmss list-instance-connection-info --resource-group azuredemo --name ScaleSet
+
+//Login to the tool
+ssh techusr@13.92.224.66 -p 50001
+
+// Install the stress tool
+sudo apt-get -y install stress
+
+//Issue the stress tool command
+sudo stress --cpu 100 --timeout 420 &
