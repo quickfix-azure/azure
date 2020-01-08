@@ -1,1 +1,8 @@
+route table with CLI , Ansible, powershell
+ https://docs.microsoft.com/en-us/azure/virtual-network/tutorial-create-route-table-cli
+ 
+portal: 
+ https://docs.microsoft.com/en-us/azure/virtual-network/tutorial-create-route-table-portal
+ 
+
 https://docs.microsoft.com/en-us/azure/virtual-network/manage-route-table
