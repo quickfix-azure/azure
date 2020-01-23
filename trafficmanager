@@ -1,0 +1,74 @@
+az group create \
+    --name myResourceGroup \
+    --location eastus
+az network traffic-manager profile create \
+	--name myTrafficManager \
+	--resource-group myResourceGroup \
+	--routing-method Priority \
+	--path "/" \
+	--protocol HTTP \
+	--unique-dns-name myTrafficManagerProfileDemo \
+	--ttl 30 \
+	--port 80    
+  
+ az appservice plan create \
+    --name qfdemo_eastus \
+    --resource-group myResourceGroup \
+    --location eastus \
+    --sku S1
+
+az appservice plan create \
+    --name qfdemo_westeurope \
+    --resource-group myResourceGroup \
+    --location westeurope \
+    --sku S1
+    
+az webapp create \
+    --name quickfixdemo1 \
+    --plan qfdemo_eastus \
+    --resource-group myResourceGroup
+
+az webapp create \
+    --name quickfixdemo2 \
+    --plan qfdemo_westeurope \
+    --resource-group myResourceGroup
+   
+az webapp show \
+    --name quickfixdemo1 \
+    --resource-group myResourceGroup \
+    --query id
+
+az network traffic-manager endpoint create \
+    --name quickfixdemo1 \
+    --resource-group myResourceGroup \
+    --profile-name myTrafficManager \
+    --type azureEndpoints \
+    --target-resource-id "/subscriptions/652453d9-80c1-44fa-90e2-2cbb494003c1/resourceGroups/myResourceGroup/providers/Microsoft.Web/sites/quickfixdemo1" \
+    --priority 1 \
+    --endpoint-status Enabled
+    
+az webapp show \
+    --name quickfixdemo2 \
+    --resource-group myResourceGroup \
+    --query id
+
+az network traffic-manager endpoint create \
+    --name quickfixdemo2 \
+    --resource-group myResourceGroup \
+    --profile-name myTrafficManager \
+    --type azureEndpoints \
+    --target-resource-id /subscriptions/652453d9-80c1-44fa-90e2-2cbb494003c1/resourceGroups/myResourceGroup/providers/Microsoft.Web/sites/quickfixdemo2 \
+    --priority 2 \
+    --endpoint-status Enabled
+  
+ az network traffic-manager profile show \
+    --name myTrafficManager \
+    --resource-group myResourceGroup \
+    --query dnsConfig.fqdn 
+    
+ az network traffic-manager endpoint update \
+     --name quickfixdemo1 \
+     --resource-group myResourceGroup \
+     --profile-name myTrafficManager \
+     --type azureEndpoints \
+     --endpoint-status Disabled   
