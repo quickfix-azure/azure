@@ -72,3 +72,23 @@ az network traffic-manager endpoint create \
      --profile-name myTrafficManager \
      --type azureEndpoints \
      --endpoint-status Disabled   
+ az network traffic-manager endpoint update \
+     --name quickfixdemo1 \
+     --resource-group myResourceGroup \
+     --profile-name myTrafficManager \
+     --type azureEndpoints \
+     --endpoint-status Enabled  
+     
+  az network traffic-manager endpoint update \
+     --name quickfixdemo2 \
+     --resource-group myResourceGroup \
+     --profile-name myTrafficManager \
+     --type azureEndpoints \
+     --endpoint-status Disabled 
+     
+   az network traffic-manager endpoint update \
+     --name quickfixdemo2 \
+     --resource-group myResourceGroup \
+     --profile-name myTrafficManager \
+     --type azureEndpoints \
+     --endpoint-status Enabled     
